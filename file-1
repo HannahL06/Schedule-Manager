@@ -1,10 +1,10 @@
 import time
 import datetime
+import sys
 
 def start_display():
   tasks_list = []
-  num_tasks = int(input("How many tasks would you like to enter?"))
-  
+  num_tasks = int(input("How many tasks would you like to enter? "))
   x = 0
   while x < num_tasks:
     task_name = input("What is your task? ")
@@ -13,9 +13,8 @@ def start_display():
     task_dict = {"task": task_name, "time": task_time, "difficulty": task_diff}
     tasks_list.append(task_dict)
     x += 1
-    
-  order = int(input("To order tasks by time, press 1.\nTo order tasks by difficulty, press 2.  "))
-  direction = int(input("To order your tasks from greatest to least, press 1.\nTo order your tasks from least to greatest, press 2.  "))
+  order = int(input("To organise tasks by time, press 1.\nTo organise tasks by difficulty, press 2.  "))
+  direction = int(input("To order tasks from greatest to least, press 1.\nTo order tasks from least to greatest, press 2.  "))
   if order == 1:
     task_order = "time"
   elif order == 2:
@@ -28,35 +27,45 @@ def sort_tasks(tasks_list, task_order, direction):
     sorted_list.reverse()
   return sorted_list
   
-def timer(sorted_list, task_mins, current_task_index)
-  task_seconds =  task_mins * 60
+def timer(task_mins):
+  print(f"Starting a timer for {task_mins} minutes")
+  countdown(task_mins)
+  while True:
+    more_time = int(input("If you would like more time, press 1.\nIf you are finished this task, press 2.  "))
+    if more_time == 1:
+      task_mins = int(input("How much much time, in minutes, would you like to add to the timer?  "))
+      print(f"Adding {task_mins} minutes to the timer")
+      countdown(task_mins)
+    elif more_time == 2:
+      print("Task Complete")
+      break
+    else:
+      print("Invalid Input. Please enter 1 or 2")
+  
+def countdown(task_mins):
+  task_seconds = task_mins * 60
   while task_seconds > 0:
-    timer = datetime.timedelta(seconds = task_seconds)
-    minutes = task_seconds // 60
-    seconds = task_seconds % 60
-    print(f"{minutes:2d} : {seconds:02d}")
-    time.sleep(1)
-    task_seconds -= 1
-  print("Ringggg - Your timer is up!")
-  more_time = int(input("If you would like more time, press 1.\nIf you are finished, press 2.  "))
-  while more_time == 1:
-    task_mins = int(input("How much much time, in minutes, would you like to add to the timer?  "))
-    timer(sorted_list, task_mins)
-  if more_time == 2:
-    current_task_index += 1
-  return current_task_index
+      minutes = task_seconds // 60
+      seconds = task_seconds % 60
+      sys.stdout.write("\r" + " " * 5)
+      sys.stdout.flush()
+      print(f"{minutes:02d} : {seconds:02d}", end="", flush=True)
+      time.sleep(1)
+      task_seconds -= 1
+  print("Riiinngg - Your timer is up!")
     
-
+    
 tasks_list, task_order, direction = start_display()
-sorted_list = sort_tasks(tasks_list, direction, task_order)
+sorted_list = sort_tasks(tasks_list, task_order, direction)
 
 print("Your tasks are:")
 for task in sorted_list:
   print(task["task"])
 
 current_task_index = 0
-while current_task_index < (len(sorted_list)-1):
+while current_task_index < len(sorted_list):
   start_prompt = int(input(f"Your current task is {sorted_list[current_task_index]['task']}.\nWhen you are ready to begin, press 1. "))
   if start_prompt == 1:
-  task_mins = sorted_list[current_task_index]["time"]
-  task_timer(sorted_list, task_mins, current_task_index)
+    task_mins = sorted_list[current_task_index]["time"]
+    timer(task_mins)
+    current_task_index += 1
