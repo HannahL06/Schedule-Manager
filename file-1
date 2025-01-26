@@ -8,13 +8,46 @@ def start_display():
   x = 0
   while x < num_tasks:
     task_name = input("What is your task? ")
-    task_time = int(input("About how long, in minutes, will it take? "))
-    task_diff = int(input("How difficult is your task, on a scale of one to ten (ten being the hardest) ? "))
+    while True:
+      try:
+        task_time = int(input("About how long, in minutes, will it take? "))
+        if task_time <= 0:
+          print("Please enter a positive number for task time.")
+        else:
+          break
+      except ValueError:
+        print("Please enter a valid number for task time.")
+    while True:
+      try:
+        task_diff = int(input("How difficult is your task, on a scale of one to ten (ten being the hardest) ? "))
+        if not 1 <= task_diff <= 10:
+          print("Please enter an integer between 1 and 10.")
+        else:
+          break
+      except ValueError:
+        print("Please enter a valid number for difficulty.")
+    
     task_dict = {"task": task_name, "time": task_time, "difficulty": task_diff}
     tasks_list.append(task_dict)
     x += 1
-  order = int(input("To organise tasks by time, press 1.\nTo organise tasks by difficulty, press 2.  "))
-  direction = int(input("To order tasks from greatest to least, press 1.\nTo order tasks from least to greatest, press 2.  "))
+  while true:
+    try:
+      order = int(input("To organise tasks by time, press 1.\nTo organise tasks by difficulty, press 2.  "))
+      if order != 1 and order != 2:
+        print("please enter 1 or 2.")
+      else:
+        break
+    except ValueError:
+      print("Please enter a valid number.")
+  while True:
+    try:
+      direction = int(input("To order tasks from greatest to least, press 1.\nTo order tasks from least to greatest, press 2.  "))
+      if direction != 1 and direction != 2:
+        print("Please enter 1 or 2.")
+      else:
+        break
+    except ValueError:
+      print("Please enter a valid number.")
   if order == 1:
     task_order = "time"
   elif order == 2:
@@ -31,16 +64,25 @@ def timer(task_mins):
   print(f"Starting a timer for {task_mins} minutes")
   countdown(task_mins)
   while True:
-    more_time = int(input("If you would like more time, press 1.\nIf you are finished this task, press 2.  "))
-    if more_time == 1:
-      task_mins = int(input("How much much time, in minutes, would you like to add to the timer?  "))
-      print(f"Adding {task_mins} minutes to the timer")
-      countdown(task_mins)
-    elif more_time == 2:
-      print("Task Complete")
-      break
-    else:
-      print("Invalid Input. Please enter 1 or 2")
+    try:
+      more_time = int(input("If you would like more time, press 1.\nIf you are finished this task, press 2.  "))
+      if more_time == 1:
+        while True:
+          try:
+            task_mins = int(input("How much much time, in minutes, would you like to add to the timer?  "))
+            if task_mins <= 0:
+              print("Please enter a positive number of minutes.")
+            else:
+              print(f"Adding {task_mins} minutes to the timer")
+              countdown(task_mins)
+              break
+          except ValueError:
+            print("Please enter a valid number.")
+      elif more_time == 2:
+        print("Task Complete")
+        break
+      else:
+        print("Invalid Input. Please enter 1 or 2")
   
 def countdown(task_mins):
   task_seconds = task_mins * 60
